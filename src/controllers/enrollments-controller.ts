@@ -1,6 +1,6 @@
 import { AuthenticatedRequest } from "@/middlewares";
 import enrollmentsService from "@/services/enrollments-service";
-import { Response } from "express";
+import { Response, Request } from "express";
 import httpStatus from "http-status";
 
 export async function getEnrollmentByUser(req: AuthenticatedRequest, res: Response) {
@@ -39,4 +39,8 @@ export async function getAddressFromCEP(req: AuthenticatedRequest, res: Response
       return res.send(httpStatus.NO_CONTENT);
     }
   }
+}
+
+export function getTeste(req: Request, res: Response) {
+  return res.sendStatus(httpStatus.OK);
 }
