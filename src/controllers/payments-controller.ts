@@ -42,5 +42,12 @@ export async function postPayment(req: AuthenticatedRequest, res: Response) {
   const value= ticketType.price;
 
   const insert = await paymentService.insertPaymentData(ticketId, cardData, value);
-  res.send(insert);
+  if(!insert) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+  const update =await paymentService.updateStatusTicket(ticketId);
+  if(!insert) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+  return res.send(insert);
 }

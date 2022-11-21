@@ -12,12 +12,12 @@ async function getPaymentByTicketIdRepository(ticketId: number) {
   return prisma.payment.findFirst({ where: { ticketId } });
 }
 
-async function insertPaymentDataRepository(ticketId: number, cardData: any, value: number) {
+async function insertPaymentDataRepository(ticketId: number, cardData: any, value: number, lastNumberString: string) {
   return prisma.payment.create({
     data: {
       ticketId,
       cardIssuer: cardData.issuer,
-      cardLastDigits: String(cardData.number),
+      cardLastDigits: lastNumberString,
       value: value
     }
   });
@@ -27,11 +27,21 @@ async function getTicketTypeByIdRepository(id: number) {
   return prisma.ticketType.findUnique({ where: { id } });
 }
 
+async function updateStatusTicketRepository(id: number) {
+  return prisma.ticket.update({ 
+    where: { id },
+    data: {
+      status: "PAID"
+    }
+  });
+}
+
 const paymentsRepository = {
   getTicketByIdRepository,
   getEnrollmentByIdRepository,
   getPaymentByTicketIdRepository,
   insertPaymentDataRepository,
-  getTicketTypeByIdRepository
+  getTicketTypeByIdRepository,
+  updateStatusTicketRepository
 };
 export default paymentsRepository;

@@ -20,7 +20,10 @@ export async function getTickets(req: AuthenticatedRequest, res: Response) {
       return res.sendStatus(httpStatus.NOT_FOUND);
     }
     const ticketsType = await ticketsService.getAllTickets(enrollmentId);
-    res.status(httpStatus.OK).send(ticketsType);
+    if(ticketsType.length===1) {
+      return res.status(httpStatus.OK).send(ticketsType[0]);
+    }
+    return res.status(httpStatus.OK).send(ticketsType);
   } catch (error) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
@@ -32,7 +35,6 @@ export async function postTickets(req: AuthenticatedRequest, res: Response) {
   if(!ticketTypeId) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
-  const status= "RESERVED";
   try {
     const enrollment = await ticketsService.getEnrollmentByUserId(userId);
     const insert = await ticketsService.insertTicketTypeId(ticketTypeId, enrollment.id);
@@ -41,7 +43,7 @@ export async function postTickets(req: AuthenticatedRequest, res: Response) {
     const response= {
       id: insert.id,
       status: insert.status,
-      ticketType: insert.ticketTypeId,
+      ticketTypeId: insert.ticketTypeId,
       enrollmentId: insert.enrollmentId,
       TicketType: ticketType,
       createdAt: insert.createdAt,

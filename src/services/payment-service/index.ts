@@ -13,18 +13,28 @@ async function getPaymentByTicketId(ticketId: number) {
 }
 
 async function insertPaymentData(ticketId: number, cardData: any, value: number) {
-  return await paymentsRepository.insertPaymentDataRepository(ticketId, cardData, value);
+  const numberString=  String(cardData.number);
+  let lastNumberString="";
+  for(let i=11; i< numberString.length; i++ ) {
+    lastNumberString = lastNumberString + numberString[i];
+  }
+  return await paymentsRepository.insertPaymentDataRepository(ticketId, cardData, value, lastNumberString);
 }
 
 async function getTicketTypeById(id: number) {
   return await paymentsRepository.getTicketTypeByIdRepository(id);
+}
+
+async function updateStatusTicket(id: number) {
+  return await paymentsRepository.updateStatusTicketRepository(id);
 }
 const paymentService = {
   getTicketById,
   getEnrollmentById,
   getPaymentByTicketId,
   insertPaymentData,
-  getTicketTypeById
+  getTicketTypeById,
+  updateStatusTicket
 };
 
 export default paymentService;
