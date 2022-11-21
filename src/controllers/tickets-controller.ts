@@ -32,6 +32,7 @@ export async function postTickets(req: AuthenticatedRequest, res: Response) {
   if(!ticketTypeId) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
+  const status= "RESERVED";
   try {
     const enrollment = await ticketsService.getEnrollmentByUserId(userId);
     const insert = await ticketsService.insertTicketTypeId(ticketTypeId, enrollment.id);
